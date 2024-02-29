@@ -3,33 +3,92 @@ function getComputerChoice() {
 	 * This function returns a random choice for the computer
 	 */
 
-	const choicesList = ['rock', 'paper', 'seasors']
+	const choicesList = ['rock', 'paper', 'scissors']
 	let randomIndex = Math.floor(Math.random() * choicesList.length);
 	let randomItem = choicesList[randomIndex];
 	return randomItem
 }
+
 
 function getUserChoice() {
 	/*
 	 * This function gets the user choice via prompt
 	 */
 
-	let userChoice = prompt("Select one of items below and enter the complete name (it's case-insensitive):\n\nrock\npaper\nseasors");
+	let userChoice = prompt("Select one of items below and enter the complete name (it's case-insensitive):\n\nrock\npaper\nscissors");
 
 	// make it case-insensitive
 	userChoice = userChoice.toLowerCase();
 
 	// check if the user choice is valid
-	const validItems = ['rock', 'paper', 'seasors'];
+	const validItems = ['rock', 'paper', 'scissors'];
 	while (!validItems.includes(userChoice)) {
-		userChoice = prompt("Sorry, the item you selected is not valid! You should type one of these exact words; the case does not matter, but write the complete word!\n\nrock\npaper\nseasors")
+		userChoice = prompt("Sorry, the item you selected is not valid! You should type one of these exact words; the case does not matter, but write the complete word!\n\nrock\npaper\nscissors")
 		userChoice = userChoice.toLowerCase();
 	}
 
 	return userChoice
 }
 
-// test getUserChoice function
-console.log(getUserChoice());
+
+function playRound(playerSelection, computerSelection) {
+	/*
+	 * This function decides the round winner
+	 * Goal: use the chioces array and the difference of indices of the chioces to decide the winner
+	 */
+	
+	let result, message;
+	
+	const validItems = ['rock', 'paper', 'scissors'];
+	const playerIndex = validItems.indexOf(playerSelection);
+	const computerIndex = validItems.indexOf(computerSelection);
+	const choicesDifference = playerIndex - computerIndex;
+	
+	// Check whether the input arguments are correct
+	if (!(validItems.includes(playerSelection) && validItems.includes(computerSelection))) {
+                try {
+                        throw Error('The playRound function could not find the winner! Maybe the input arguments were not correct!');
+                } catch (e) {
+			return e.message
+                }
+	}
+
+	
+	// These winning values are determined by a little trick by checking the results on paper
+	const winningDifferences = [-2, 1];
+	const losingDifferences = [-1, 2];
+
+	if (choicesDifference === 0) {
+		result = "tie";
+		message = "It's a tie!";
+	} else if (winningDifferences.includes(choicesDifference)) {
+		result = 'win';
+		message = `You win! ${playerSelection} beats ${computerSelection}`;
+	} else if (losingDifferences.includes(choicesDifference)) {
+		result = 'lose';
+                message = `You lost! ${computerSelection} beats ${playerSelection}`;
+        }
+
+	let resultObject = {
+		result: result,
+		message: message
+	};
+
+	return resultObject
+}
+
+
+// Test the playRound function
+console.log(playRound('rock', 'rock'));
+console.log(playRound('rock', 'paper'));
+console.log(playRound('rock', 'scissors'));
+console.log(playRound('paper', 'rock'));
+console.log(playRound('paper', 'paper'));
+console.log(playRound('paper', 'scissors'));
+console.log(playRound('scissors', 'rock'));
+console.log(playRound('scissors', 'paper'));
+console.log(playRound('scissors', 'scissors'));
+// check inappropriate inputs
+console.log(playRound('ss', 'r'));
 
 
