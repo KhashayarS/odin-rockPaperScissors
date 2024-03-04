@@ -78,17 +78,37 @@ function playRound(playerSelection, computerSelection) {
 }
 
 
-// Test the playRound function
-console.log(playRound('rock', 'rock'));
-console.log(playRound('rock', 'paper'));
-console.log(playRound('rock', 'scissors'));
-console.log(playRound('paper', 'rock'));
-console.log(playRound('paper', 'paper'));
-console.log(playRound('paper', 'scissors'));
-console.log(playRound('scissors', 'rock'));
-console.log(playRound('scissors', 'paper'));
-console.log(playRound('scissors', 'scissors'));
-// check inappropriate inputs
-console.log(playRound('ss', 'r'));
+function playGame() {
+	/* 
+	 * This function plays five rounds and decides the winner of the game
+	 */
 
+	let playerSelection, computerSelection, roundResultObject;
+	let roundsResults = [];   // this array would save the result of each round
+	
+	// Play rounds
+	for (let i = 0; i <= 4; i++) {
+		playerSelection = getUserChoice();
+		computerSelection = getComputerChoice();
+		roundResultObject = playRound(playerSelection, computerSelection);
+		roundsResults.push(roundResultObject.result);
+		console.log(`********** Round #${i+1} result:\nUser Selection: ${playerSelection}\nComputer Selection: ${computerSelection}\n${roundResultObject.message}`);
+	}
 
+	// Decide the game winner
+	// Use filter method to count the wins and losses
+	let wins = roundsResults.filter(result => result === 'win').length;
+	let losses = roundsResults.filter(result => result === 'lose').length;
+
+	// Declare the winner
+	if (wins > losses) {
+		console.log('Congratulations! You won the game!');
+	} else if (losses > wins) {
+		console.log('Sorry! You lost the game!');
+	} else {
+		console.log('Final result: It\'s a tie!');
+	}
+}
+
+// Test the playGame function
+playGame();
