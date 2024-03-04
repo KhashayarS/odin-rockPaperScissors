@@ -97,13 +97,13 @@ function playGame() {
 
 	// Decide the game winner
 	// Use filter method to count the wins and losses
-	let wins = roundsResults.filter(result => result === 'win').length;
-	let losses = roundsResults.filter(result => result === 'lose').length;
+	let numWins = roundsResults.filter(result => result === 'win').length;
+	let numLosses = roundsResults.filter(result => result === 'lose').length;
 
 	// Declare the winner
-	if (wins > losses) {
+	if (numWins > numLosses) {
 		alert('Congratulations! You won the game!\nYou can see the rounds\' results in the console.');
-	} else if (losses > wins) {
+	} else if (numLosses > numWins) {
 		alert('Sorry! You lost the game!\nYou can see the rounds\' results in the console.');
 	} else {
 		alert('Final result: It\'s a tie!\nYou can see the rounds\' results in the console.');
