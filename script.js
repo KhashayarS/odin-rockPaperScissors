@@ -102,11 +102,11 @@ function playGame() {
 
 	// Declare the winner
 	if (wins > losses) {
-		console.log('Congratulations! You won the game!');
+		alert('Congratulations! You won the game!\nYou can see the rounds\' results in the console.');
 	} else if (losses > wins) {
-		console.log('Sorry! You lost the game!');
+		alert('Sorry! You lost the game!\nYou can see the rounds\' results in the console.');
 	} else {
-		console.log('Final result: It\'s a tie!');
+		alert('Final result: It\'s a tie!\nYou can see the rounds\' results in the console.');
 	}
 }
 
