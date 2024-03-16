@@ -79,35 +79,7 @@ function playRound(playerSelection, computerSelection) {
 
 
 function playGame() {
-	/* 
-	 * This function plays five rounds and decides the winner of the game
-	 */
-
-	let playerSelection, computerSelection, roundResultObject;
-	let roundsResults = [];   // this array would save the result of each round
-	
-	// Play rounds
-	for (let i = 0; i <= 4; i++) {
-		playerSelection = getUserChoice();
-		computerSelection = getComputerChoice();
-		roundResultObject = playRound(playerSelection, computerSelection);
-		roundsResults.push(roundResultObject.result);
-		console.log(`********** Round #${i+1} result:\nUser Selection: ${playerSelection}\nComputer Selection: ${computerSelection}\n${roundResultObject.message}`);
-	}
-
-	// Decide the game winner
-	// Use filter method to count the wins and losses
-	let numWins = roundsResults.filter(result => result === 'win').length;
-	let numLosses = roundsResults.filter(result => result === 'lose').length;
-
-	// Declare the winner
-	if (numWins > numLosses) {
-		alert('Congratulations! You won the game!\nYou can see the rounds\' results in the console.');
-	} else if (numLosses > numWins) {
-		alert('Sorry! You lost the game!\nYou can see the rounds\' results in the console.');
-	} else {
-		alert('Final result: It\'s a tie!\nYou can see the rounds\' results in the console.');
-	}
+	console.log("This function was deleted and will be implemented with a new logic");
 }
 
 // Test the playGame function
