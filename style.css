@@ -100,6 +100,7 @@ button.itemPickBtn.picked {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-bottom: 2rem;
 }
 
 .roundResult > * {
@@ -130,7 +131,14 @@ button.itemPickBtn.picked {
     font-size: 1.7rem;
 }
 
+.rockPaperScissorsGif {
+    height: 100%;
+    object-fit: contain;
+    max-height: 268px;
+}
 
+
+    
 /* CSS for buttons */
 /* Reference: https://getcssscan.com/css-buttons-examples */
 

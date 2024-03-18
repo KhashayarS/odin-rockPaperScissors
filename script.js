@@ -37,7 +37,7 @@ function playRound(playerSelection, computerSelection) {
 	 * Goal: use the chioces array and the difference of indices of the chioces to decide the winner
 	 */
 	
-	let result, message;
+	let result, message, winnerChoice, loserChoice;
 	
 	const validItems = ['rock', 'paper', 'scissors'];
 	const playerIndex = validItems.indexOf(playerSelection);
@@ -61,26 +61,125 @@ function playRound(playerSelection, computerSelection) {
 	if (choicesDifference === 0) {
 		result = "tie";
 		message = "It's a tie!";
+        winnerChoice = playerSelection;
+        loserChoice = playerSelection;
 	} else if (winningDifferences.includes(choicesDifference)) {
 		result = 'win';
 		message = `You win! ${playerSelection} beats ${computerSelection}`;
+        winnerChoice = playerSelection;
+        loserChoice = computerSelection;
 	} else if (losingDifferences.includes(choicesDifference)) {
 		result = 'lose';
-                message = `You lost! ${computerSelection} beats ${playerSelection}`;
-        }
+        message = `You lost! ${computerSelection} beats ${playerSelection}`;
+        winnerChoice = computerSelection;
+        loserChoice = playerSelection;
+    }
 
 	let resultObject = {
 		result: result,
-		message: message
+		message: message,
+        winnerChoice:  winnerChoice,
+        loserChoice: loserChoice,
 	};
 
 	return resultObject
 }
 
-
 function playGame() {
 	console.log("This function was deleted and will be implemented with a new logic");
 }
 
-// Test the playGame function
-playGame();
+
+
+let playerButtonsContainer = document.querySelector(".playerButtons");
+let computerPick = document.querySelector("#computerPick");
+let roundResult = document.querySelector(".resultsContainer .roundResult");
+let roundResultIcons = document.querySelector("#roundResultIcons");
+
+function resetRoundUI() {
+    let playerButtonsItems = playerButtonsContainer.children;
+
+    for (btn of playerButtonsItems) {
+        console.log(btn);
+        if (btn.classList.contains('picked')) {
+            btn.classList.remove('picked');
+        }
+    }
+
+    computerPick.innerText = "?";
+
+    roundResult.innerHTML = "";
+
+    let rockPaperScissorsGif = document.createElement("img");
+    rockPaperScissorsGif.src = "./static/images/rock-paper-scissors.gif";
+    rockPaperScissorsGif.classList.add("rockPaperScissorsGif");
+    roundResult.appendChild(rockPaperScissorsGif);
+
+}
+
+
+function displayRoundResult(roundResultObject) {
+    let result = roundResultObject.result;
+    let message = roundResultObject.message;
+    let winnerChoice = roundResultObject.winnerChoice;
+    let loserChoice = roundResultObject.loserChoice;
+
+    let winnerElementFontAwesome = `<i class="fa fa-hand-${winnerChoice}-o fa-lg"></i>`;
+    let loserElementFontAwesome = `<i class="fa fa-hand-${loserChoice}-o fa-lg"></i>`;
+
+    let properVerb;
+    
+    if (result === 'win' && winnerChoice === 'scissors') {
+        properVerb = 'BEAT';
+    } else if (result === 'tie' && winnerChoice === 'scissors') {
+        properVerb = 'EQUAL';
+    } else if (result === 'tie') {
+        properVerb = 'EQUALS';
+    } else {
+        properVerb = 'BEATS';
+    }
+
+    let insertingHTML = `${winnerElementFontAwesome}&nbsp;&nbsp;&nbsp;${properVerb}&nbsp;&nbsp;&nbsp;${loserElementFontAwesome}`;
+
+    console.log(insertingHTML);
+
+    roundResultIcons.innerHTML = insertingHTML;
+    
+    let resultPara = document.querySelector('p');
+
+    if (result === 'win') {
+        resultPara.classList.add('winningRound');
+        resultPara.innerText = "You Won!";
+    } else if (result === 'lose') {
+        resultPara.classList.add('losingRound');
+        resultPara.innerText = "You Lost!";
+    } else {
+        resultPara.classList.add('tyingRound');
+        resultPara.innerText = "It's a Tie!";
+    }
+
+    roundResultIcons.appendChild(resultPara);
+        
+}
+
+// Anonyous function handle the events
+(function () {
+    playerButtonsContainer.addEventListener("click", (event) => {
+        let pickedElement = event.target;
+        let btnId = event.target.id;
+        let userChoice = event.target.value;
+
+        pickedElement.classList.add("picked");
+
+        let computerChoice = getComputerChoice();
+        computerPick.innerText = computerChoice;
+
+        let resultObject = playRound(userChoice, computerChoice);
+        displayRoundResult(resultObject);
+
+
+
+
+    });
+
+})();
