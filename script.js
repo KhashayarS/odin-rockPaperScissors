@@ -94,13 +94,16 @@ function playGame() {
 let playerButtonsContainer = document.querySelector(".playerButtons");
 let computerPick = document.querySelector("#computerPick");
 let roundResult = document.querySelector(".resultsContainer .roundResult");
-let roundResultIcons = document.querySelector("#roundResultIcons");
+let currentUserScore = document.querySelector("#currentUserScore");
+let currentComputerScore = document.querySelector("#currentComputerScore");
+let userScore = 0;
+let computerScore = 0;
+
 
 function resetRoundUI() {
     let playerButtonsItems = playerButtonsContainer.children;
 
     for (btn of playerButtonsItems) {
-        console.log(btn);
         if (btn.classList.contains('picked')) {
             btn.classList.remove('picked');
         }
@@ -123,6 +126,11 @@ function displayRoundResult(roundResultObject) {
     let message = roundResultObject.message;
     let winnerChoice = roundResultObject.winnerChoice;
     let loserChoice = roundResultObject.loserChoice;
+    
+    roundResult.innerHTML = "";
+    
+    let roundResultIcons = document.createElement('p');
+    roundResultIcons.setAttribute('id', 'roundResultIcons');
 
     let winnerElementFontAwesome = `<i class="fa fa-hand-${winnerChoice}-o fa-lg"></i>`;
     let loserElementFontAwesome = `<i class="fa fa-hand-${loserChoice}-o fa-lg"></i>`;
@@ -141,11 +149,10 @@ function displayRoundResult(roundResultObject) {
 
     let insertingHTML = `${winnerElementFontAwesome}&nbsp;&nbsp;&nbsp;${properVerb}&nbsp;&nbsp;&nbsp;${loserElementFontAwesome}`;
 
-    console.log(insertingHTML);
-
+    
     roundResultIcons.innerHTML = insertingHTML;
     
-    let resultPara = document.querySelector('p');
+    let resultPara = document.createElement('p');
 
     if (result === 'win') {
         resultPara.classList.add('winningRound');
@@ -157,10 +164,34 @@ function displayRoundResult(roundResultObject) {
         resultPara.classList.add('tyingRound');
         resultPara.innerText = "It's a Tie!";
     }
+    
+    let playAgainBtn = document.createElement('button');
+    playAgainBtn.setAttribute('class', 'playAgainBtn');
+    playAgainBtn.setAttribute('role', 'button');
+    playAgainBtn.innerHTML =  '<span class="text">Play Again!</span>';
 
-    roundResultIcons.appendChild(resultPara);
+    roundResult.appendChild(roundResultIcons);
+    roundResult.appendChild(resultPara);
+    roundResult.appendChild(playAgainBtn);
         
 }
+
+function updateTotalScore(userScore, computerScore) {
+    let currentUserScore = document.querySelector("#currentUserScore");
+    let currentComputerScore = document.querySelector("#currentComputerScore");
+    
+    currentUserScore.innerText = `You: ${userScore}`;
+    currentComputerScore.innerText = `Computer: ${computerScore}`;
+}
+
+function activatePlayAgainBtn() {
+    let playAgainBtn = document.querySelector('.roundResult .playAgainBtn');
+    
+    playAgainBtn.addEventListener('click', (event) => {
+        resetRoundUI();
+    });
+}
+
 
 // Anonyous function handle the events
 (function () {
@@ -169,16 +200,26 @@ function displayRoundResult(roundResultObject) {
         let btnId = event.target.id;
         let userChoice = event.target.value;
 
+
         pickedElement.classList.add("picked");
 
         let computerChoice = getComputerChoice();
         computerPick.innerText = computerChoice;
 
         let resultObject = playRound(userChoice, computerChoice);
+
+        if (resultObject.result === 'win') {
+            userScore++;
+        } else if (resultObject.result === 'lose') {
+            computerScore++;
+        }
+
         displayRoundResult(resultObject);
+        
+        console.log(userScore, computerScore);
+        updateTotalScore(userScore, computerScore);
 
-
-
+        activatePlayAgainBtn();
 
     });
 
