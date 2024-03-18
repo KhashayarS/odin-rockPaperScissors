@@ -91,7 +91,7 @@ function playGame() {
 
 
 
-let playerButtonsContainer = document.querySelector(".playerButtons");
+let playerButtonsContainer = document.querySelector(".playerButtonsContainer");
 let computerPick = document.querySelector("#computerPick");
 let roundResult = document.querySelector(".resultsContainer .roundResult");
 let currentUserScore = document.querySelector("#currentUserScore");
@@ -210,7 +210,9 @@ function activatePlayAgainBtn() {
 
 function userBtnClickHandler(event) {
 
-    if (!gamePaused) {
+    let validButtonSelected = event.target.classList.contains('itemPickBtn');
+
+    if ((!gamePaused) && validButtonSelected) {
 
         pauseGame();
 
@@ -230,7 +232,7 @@ function userBtnClickHandler(event) {
             userScore++;
         } else if (resultObject.result === 'lose') {
             computerScore++;
-        }
+        } 
 
         displayRoundResult(resultObject);
 
