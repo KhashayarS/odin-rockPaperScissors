@@ -98,9 +98,21 @@ let currentUserScore = document.querySelector("#currentUserScore");
 let currentComputerScore = document.querySelector("#currentComputerScore");
 let userScore = 0;
 let computerScore = 0;
+let gamePaused = false;
 
 
-function resetRoundUI() {
+function pauseGame() {
+    gamePaused = true;
+    playerButtonsContainer.removeEventListener("click", userBtnClickHandler);
+}
+
+function resumeGame() {
+    gamePaused = false;
+    playerButtonsContainer.addEventListener("click", userBtnClickHandler);
+}
+
+
+function resetRound() {
     let playerButtonsItems = playerButtonsContainer.children;
 
     for (btn of playerButtonsItems) {
@@ -118,6 +130,7 @@ function resetRoundUI() {
     rockPaperScissorsGif.classList.add("rockPaperScissorsGif");
     roundResult.appendChild(rockPaperScissorsGif);
 
+    resumeGame();
 }
 
 
@@ -176,6 +189,7 @@ function displayRoundResult(roundResultObject) {
         
 }
 
+
 function updateTotalScore(userScore, computerScore) {
     let currentUserScore = document.querySelector("#currentUserScore");
     let currentComputerScore = document.querySelector("#currentComputerScore");
@@ -184,18 +198,22 @@ function updateTotalScore(userScore, computerScore) {
     currentComputerScore.innerText = `Computer: ${computerScore}`;
 }
 
+
 function activatePlayAgainBtn() {
     let playAgainBtn = document.querySelector('.roundResult .playAgainBtn');
     
     playAgainBtn.addEventListener('click', (event) => {
-        resetRoundUI();
+        resetRound();
     });
 }
 
 
-// Anonyous function handle the events
-(function () {
-    playerButtonsContainer.addEventListener("click", (event) => {
+function userBtnClickHandler(event) {
+
+    if (!gamePaused) {
+
+        pauseGame();
+
         let pickedElement = event.target;
         let btnId = event.target.id;
         let userChoice = event.target.value;
@@ -215,12 +233,17 @@ function activatePlayAgainBtn() {
         }
 
         displayRoundResult(resultObject);
-        
-        console.log(userScore, computerScore);
+
         updateTotalScore(userScore, computerScore);
 
         activatePlayAgainBtn();
+    }
 
-    });
+}
+
+// Anonyous function handle the events
+(function () {
+    
+    playerButtonsContainer.addEventListener("click", userBtnClickHandler);
 
 })();
