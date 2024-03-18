@@ -85,20 +85,18 @@ function playRound(playerSelection, computerSelection) {
 	return resultObject
 }
 
-function playGame() {
-	console.log("This function was deleted and will be implemented with a new logic");
-}
-
-
 
 let playerButtonsContainer = document.querySelector(".playerButtonsContainer");
 let computerPick = document.querySelector("#computerPick");
 let roundResult = document.querySelector(".resultsContainer .roundResult");
 let currentUserScore = document.querySelector("#currentUserScore");
 let currentComputerScore = document.querySelector("#currentComputerScore");
+let totalResult = document.querySelector(".totalResult");
+
 let userScore = 0;
 let computerScore = 0;
 let gamePaused = false;
+let winningScore = 5;
 
 
 function pauseGame() {
@@ -131,6 +129,15 @@ function resetRound() {
     roundResult.appendChild(rockPaperScissorsGif);
 
     resumeGame();
+}
+
+
+function resetGame() {
+    userScore = 0;
+    computerScore = 0;
+    totalResult.style.display = 'block';
+    updateTotalScore(userScore, computerScore);
+    resetRound();
 }
 
 
@@ -208,6 +215,48 @@ function activatePlayAgainBtn() {
 }
 
 
+function activateResetGameBtn() {
+    let resetGameBtn = document.querySelector('.roundResult .resetGameBtn');
+
+    resetGameBtn.addEventListener('click', (event) => {
+        resetGame();
+    });
+}
+
+
+function declareWinner(userScore, computerScore) {
+    
+    totalResult.style.display = "none";
+    roundResult.innerHTML = "";
+
+    let finalResult = document.createElement('p');
+    finalResult.setAttribute('id', 'finalResult');
+
+    finalWinner = (userScore > computerScore) ? 'user' : 'computer';
+
+    let finalMessage = finalWinner === 'user' ?
+        `Congratulations!<br>You defeated computer ${userScore} to ${computerScore}.` :
+        `Sorry!<br>Computer defeated you this time ${computerScore} to ${userScore}.<br>Try again!`;
+
+    let insertingHTML = finalMessage;
+
+    finalResult.innerHTML = insertingHTML;
+
+    finalWinner === 'user' ?
+        finalResult.classList.add('winningGame') :
+        finalResult.classList.add('losingGame');
+
+    let resetGameBtn = document.createElement('button');
+    resetGameBtn.setAttribute('class', 'resetGameBtn');
+    resetGameBtn.setAttribute('role', 'button');
+    resetGameBtn.innerText =  'Restart!';
+    
+    roundResult.appendChild(finalResult);
+    roundResult.appendChild(resetGameBtn); 
+
+}
+
+
 function userBtnClickHandler(event) {
 
     let validButtonSelected = event.target.classList.contains('itemPickBtn');
@@ -234,11 +283,21 @@ function userBtnClickHandler(event) {
             computerScore++;
         } 
 
-        displayRoundResult(resultObject);
+        if (userScore >= winningScore || computerScore >= winningScore) {
 
-        updateTotalScore(userScore, computerScore);
+            declareWinner(userScore, computerScore);
+            
+            activateResetGameBtn();
 
-        activatePlayAgainBtn();
+
+        } else {
+
+            displayRoundResult(resultObject);
+
+            updateTotalScore(userScore, computerScore);
+
+            activatePlayAgainBtn();
+        }
     }
 
 }
